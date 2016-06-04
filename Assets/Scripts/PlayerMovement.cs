@@ -25,9 +25,9 @@ public class PlayerMovement : MonoBehaviour {
         characterController = GetComponent<CharacterController2D>();
 
         // listen to some events for illustration purposes
-        characterController.onControllerCollidedEvent += onControllerCollider;
-        characterController.onTriggerEnterEvent += onTriggerEnterEvent;
-        characterController.onTriggerExitEvent += onTriggerExitEvent;
+        //characterController.onControllerCollidedEvent += onControllerCollider;
+        //characterController.onTriggerEnterEvent += onTriggerEnterEvent;
+        //characterController.onTriggerExitEvent += onTriggerExitEvent;
     }
 
     // Use this for initialization

@@ -12,4 +12,10 @@ public class ControllerInput : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public float GetMovementInput()
+    {
+
+        return 0f;
+    }
 }
