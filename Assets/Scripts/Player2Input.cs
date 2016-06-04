@@ -3,16 +3,6 @@ using System.Collections;
 
 public class Player2Input : InputBaseClass {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     public override float GetHorizontalMovement()
     {
         //if both or neither key is pressed, return 0
@@ -43,5 +33,10 @@ public class Player2Input : InputBaseClass {
     public override bool GetDropDown()
     {
         return Input.GetKeyDown(KeyCode.DownArrow);
+    }
+
+    public override bool GetToggleClone()
+    {
+        return Input.GetKeyDown(KeyCode.Slash);
     }
 }

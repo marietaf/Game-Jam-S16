@@ -36,7 +36,7 @@ public class PlayerInput : InputBaseClass {
         return Input.GetKeyDown(KeyCode.S);
     }
 
-    public bool GetToggleClone()
+    public override bool GetToggleClone()
     {
         return Input.GetKeyDown(KeyCode.E);
     }
