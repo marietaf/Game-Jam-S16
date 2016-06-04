@@ -54,7 +54,7 @@ public class SmoothFollow : MonoBehaviour
         else
         {
             float disBetweenPlayers = (player1.position - player2.position).magnitude;
-            float newCameraSize = Mathf.Max(minCameraSize, Mathf.Min(maxCameraSize, disBetweenPlayers / 3));
+            float newCameraSize = Mathf.Max(minCameraSize, Mathf.Min(maxCameraSize, disBetweenPlayers ));
             _camera.orthographicSize = Mathf.SmoothDamp(_camera.orthographicSize, newCameraSize, ref _smoothSizeDampVelocity, smoothDampTime);
 
             Vector3 midpointPosition = (player1.position - player2.position) * 0.5f + player2.position;
