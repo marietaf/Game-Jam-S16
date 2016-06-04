@@ -3,16 +3,6 @@ using System.Collections;
 
 public class PlayerInput : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     public float GetHorizontalMovement()
     {
         //if both or neither key is pressed, return 0
@@ -43,5 +33,10 @@ public class PlayerInput : MonoBehaviour {
     public bool GetDropDown()
     {
         return Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
+    }
+
+    public bool GetToggleClone()
+    {
+        return Input.GetKeyDown(KeyCode.E);
     }
 }
