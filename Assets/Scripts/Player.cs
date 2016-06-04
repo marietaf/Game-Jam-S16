@@ -4,12 +4,12 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
     PlayerMovement movementComponent;
-    PlayerInput inputComponent;
+    InputBaseClass inputComponent;
 
 	// Use this for initialization
 	void Start () {
         movementComponent = GetComponent<PlayerMovement>();
-        inputComponent = GetComponent<PlayerInput>();
+        inputComponent = GetComponent<InputBaseClass>();
 	}
 	
 	// Update is called once per frame
