@@ -16,6 +16,7 @@ public class SmoothFollow : MonoBehaviour
 
     private CharacterController2D _player1Controller, _player2Controller;
     private Camera _camera;
+    private float _smoothSizeDampVelocity;
     private Vector3 _smoothDampVelocity;
 
 
@@ -47,10 +48,15 @@ public class SmoothFollow : MonoBehaviour
     {
         if(!isTwoPlayer)
         {
+            _camera.orthographicSize = minCameraSize;
             transform.position = Vector3.SmoothDamp(transform.position, player1.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
         }
         else
         {
+            float disBetweenPlayers = (player1.position - player2.position).magnitude;
+            float newCameraSize = Mathf.Max(minCameraSize, Mathf.Min(maxCameraSize, disBetweenPlayers / 3));
+            _camera.orthographicSize = Mathf.SmoothDamp(_camera.orthographicSize, newCameraSize, ref _smoothSizeDampVelocity, smoothDampTime);
+
             Vector3 midpointPosition = (player1.position - player2.position) * 0.5f + player2.position;
             transform.position = Vector3.SmoothDamp(transform.position, midpointPosition - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
         }
