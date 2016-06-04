@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour {
     private CharacterController2D characterController;
     //private Animator _animator;
     private RaycastHit2D _lastControllerColliderHit;
-    private Vector3 _velocity;
+    private Vector3 velocity;
 
     void Awake()
     {
@@ -30,13 +30,58 @@ public class PlayerMovement : MonoBehaviour {
         //characterController.onTriggerExitEvent += onTriggerExitEvent;
     }
 
-    // Use this for initialization
     void Start () {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	public void Move(float hoizontalMovement, bool jump, bool dropDown) {
+        if (characterController.isGrounded)
+        {
+            velocity.y = 0;
+        }
+        normalizedHorizontalSpeed = hoizontalMovement;
+        if (transform.localScale.x > 0f)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        }
+        if (characterController.isGrounded)
+        {
+            //_animator.Play( Animator.StringToHash( "Run" ) );
+        }
+        if (hoizontalMovement == 0)
+        {
+            if (characterController.isGrounded)
+            {
+                //_animator.Play( Animator.StringToHash( "Idle" ) );
+            }
+        }
+
+        // we can only jump whilst grounded
+        if (characterController.isGrounded && jump)
+        {
+            velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+            //_animator.Play( Animator.StringToHash( "Jump" ) );
+        }
+
+
+        // apply horizontal speed smoothing it. dont really do this with Lerp. Use SmoothDamp or something that provides more control
+        var smoothedMovementFactor = characterController.isGrounded ? groundDamping : inAirDamping; // how fast do we change direction?
+        velocity.x = Mathf.Lerp(velocity.x, hoizontalMovement * runSpeed, Time.deltaTime * smoothedMovementFactor);
+
+        // apply gravity before moving
+        velocity.y += gravity * Time.deltaTime;
+
+        // if holding down bump up our movement amount and turn off one way platform detection for a frame.
+        // this lets uf jump down through one way platforms
+        if (characterController.isGrounded && dropDown)
+        {
+            velocity.y *= 3f;
+            characterController.ignoreOneWayPlatformsThisFrame = true;
+        }
+
+        characterController.move(velocity * Time.deltaTime);
+
+        // grab our current _velocity to use as a base for all calculations
+        velocity = characterController.velocity;
+    }
 }
