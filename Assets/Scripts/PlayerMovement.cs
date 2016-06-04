@@ -11,10 +11,7 @@ public class PlayerMovement : MonoBehaviour {
     public float groundDamping = 20f; // how fast do we change direction? higher means faster
     public float inAirDamping = 5f;
     public float jumpHeight = 3f;
-
-    [HideInInspector]
-    private float normalizedHorizontalSpeed = 0;
-
+    
     private CharacterController2D characterController;
     //private Animator _animator;
     private RaycastHit2D _lastControllerColliderHit;
@@ -28,9 +25,22 @@ public class PlayerMovement : MonoBehaviour {
         characterController = GetComponent<CharacterController2D>();
 
         // listen to some events for illustration purposes
-        //characterController.onControllerCollidedEvent += onControllerCollider;
+        characterController.onControllerCollidedEvent += onControllerCollider;
         //characterController.onTriggerEnterEvent += onTriggerEnterEvent;
         //characterController.onTriggerExitEvent += onTriggerExitEvent;
+    }
+
+    void onControllerCollider(RaycastHit2D hit)
+    {
+        // bail out on plain old ground hits cause they arent very interesting
+        if (hit.normal.y == 1f && gravity < 0)
+            return;
+        if (hit.normal.y == -1f && gravity > 0)
+            return;
+
+
+        // logs any collider hits if uncommented. it gets noisy so it is commented out for the demo
+        //Debug.Log( "flags: " + characterController.collisionState + ", hit.normal: " + hit.normal );
     }
 
     void Start () {
@@ -42,7 +52,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             velocity.y = 0;
         }
-        normalizedHorizontalSpeed = horizontalMovement;
+
         if (transform.localScale.x > 0f)
         {
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
@@ -62,7 +72,6 @@ public class PlayerMovement : MonoBehaviour {
         // we can only jump whilst grounded
         if (characterController.isGrounded && jump)
         {
-            Debug.Log(Mathf.Sign(-gravity) * Mathf.Sqrt(2f * jumpHeight * Mathf.Abs(gravity)));
             velocity.y = Mathf.Sign(-gravity) * Mathf.Sqrt(2f * jumpHeight * Mathf.Abs(gravity));
             //_animator.Play( Animator.StringToHash( "Jump" ) );
         }
@@ -83,7 +92,7 @@ public class PlayerMovement : MonoBehaviour {
             characterController.ignoreOneWayPlatformsThisFrame = true;
         }
 
-        characterController.move(velocity * Time.deltaTime);
+        characterController.move(velocity * Time.deltaTime, gravity < 0);
 
         // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;

@@ -122,7 +122,7 @@ public class DemoScene : MonoBehaviour
 			_controller.ignoreOneWayPlatformsThisFrame = true;
 		}
 
-		_controller.move( _velocity * Time.deltaTime );
+		_controller.move( _velocity * Time.deltaTime , true);
 
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
