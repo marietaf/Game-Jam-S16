@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour {
     //private Animator _animator;
     private RaycastHit2D _lastControllerColliderHit;
     private Vector3 velocity;
+    private Vector3 triggeredVelocity;
+
 
     void Awake()
     {
@@ -86,4 +88,15 @@ public class PlayerMovement : MonoBehaviour {
         // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;
     }
+
+    public void TriggeredMove(float velocityMagnitude, float angle)
+    {
+        triggeredVelocity.x = velocityMagnitude * Mathf.Cos(angle);
+        triggeredVelocity.y = velocityMagnitude * Mathf.Sin(angle);
+
+        //characterController.move(triggeredVelocity * Time.deltaTime);
+        velocity += triggeredVelocity;
+        characterController.move(velocity * Time.deltaTime);
+    }
+
 }
