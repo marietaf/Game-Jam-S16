@@ -5,56 +5,55 @@ using Prime31;
 
 public class SmoothFollow : MonoBehaviour
 {
-	public Transform target;
-	public float smoothDampTime = 0.2f;
-	[HideInInspector]
-	public new Transform transform;
-	public Vector3 cameraOffset;
-	public bool useFixedUpdate = false;
-	
-	private CharacterController2D _playerController;
-	private Vector3 _smoothDampVelocity;
-	
-	
-	void Awake()
-	{
-		transform = gameObject.transform;
-		_playerController = target.GetComponent<CharacterController2D>();
-	}
-	
-	
-	void LateUpdate()
-	{
-		if( !useFixedUpdate )
-			updateCameraPosition();
-	}
+    public bool isTwoPlayer = false;
+    public Transform player1, player2;
+    public float smoothDampTime = 0.2f;
+    [HideInInspector]
+    public new Transform transform;
+    public Vector3 cameraOffset;
+    public float minCameraSize = 5, maxCameraSize = 10;
+    public bool useFixedUpdate = false;
+
+    private CharacterController2D _player1Controller, _player2Controller;
+    private Camera _camera;
+    private Vector3 _smoothDampVelocity;
 
 
-	void FixedUpdate()
-	{
-		if( useFixedUpdate )
-			updateCameraPosition();
-	}
+    void Awake()
+    {
+        transform = gameObject.transform;
+
+        _camera = GetComponent<Camera>();
+        _player1Controller = player1.GetComponent<CharacterController2D>();
+        _player2Controller = player2.GetComponent<CharacterController2D>();
+    }
 
 
-	void updateCameraPosition()
-	{
-		if( _playerController == null )
-		{
-			transform.position = Vector3.SmoothDamp( transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime );
-			return;
-		}
-		
-		if( _playerController.velocity.x > 0 )
-		{
-			transform.position = Vector3.SmoothDamp( transform.position, target.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime );
-		}
-		else
-		{
-			var leftOffset = cameraOffset;
-			leftOffset.x *= -1;
-			transform.position = Vector3.SmoothDamp( transform.position, target.position - leftOffset, ref _smoothDampVelocity, smoothDampTime );
-		}
-	}
-	
+    void LateUpdate()
+    {
+        if (!useFixedUpdate)
+            updateCameraPosition();
+    }
+
+
+    void FixedUpdate()
+    {
+        if (useFixedUpdate)
+            updateCameraPosition();
+    }
+
+
+    void updateCameraPosition()
+    {
+        if(!isTwoPlayer)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, player1.position - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
+        }
+        else
+        {
+            Vector3 midpointPosition = (player1.position - player2.position) * 0.5f + player2.position;
+            transform.position = Vector3.SmoothDamp(transform.position, midpointPosition - cameraOffset, ref _smoothDampVelocity, smoothDampTime);
+        }
+    }
+
 }
