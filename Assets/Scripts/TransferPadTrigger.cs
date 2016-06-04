@@ -4,47 +4,56 @@ using Prime31;
 
 public class TransferPadTrigger : MonoBehaviour {
 
-    private AreaEffector2D transferPadEffector;
-    private Collider2D receiver;
+    /// <summary>
+    /// Velocity/momentum transfer system requiring 2 players/characters.
+    /// </summary>
+    private Collider2D col1, col2;
     private PlayerMovement enterMovement, exitMovement;
-    private Vector3 transferVelocity, stopVelocity;
+    private Vector3 transferVelocity;
+    
 
-    // Use this for initialization
+    // Initialize the 2 expected colliders interacting with the transfer pad trigger
     void Awake () {
-        transferPadEffector = GetComponent<AreaEffector2D>();
-        receiver = null;
+        col1 = null;
+        col2 = null;
+        transferVelocity = Vector3.zero;
     }
 
     // Update is called once per frame
     void Update () {
-	
 	}
 
     void OnTriggerEnter2D (Collider2D entering) {
-        // First to enter will receive momentum from next player
-        if (receiver == null)
+
+        if (col1 == null)
         {
-            Debug.Log("enter first");
-            receiver = entering;
+            col1 = entering;
             return;
-        }
+        } else if (col1 != entering) {
+            col2 = entering; }
+        Debug.Log("a thing entered");
 
-        Debug.Log("enter second");
         enterMovement = entering.GetComponent<PlayerMovement>();
+        
+        //has loss. whyyyyyyyy
         transferVelocity = enterMovement.GetVelocity();
-        enterMovement.TriggeredMove(-1 * transferVelocity);
+        enterMovement.TriggeredMove(-1*transferVelocity);
 
-        exitMovement = receiver.GetComponent<PlayerMovement>();
+        exitMovement = col1.GetComponent<PlayerMovement>();
         exitMovement.TriggeredMove(transferVelocity);
-
-        receiver = entering;
-        Debug.Log("added up");
+        Debug.Log("a thing happened");
     }
 
-    void OnTriggerExit2D (Collider2D exiting)
+    
+    void OnTriggerExit2D(Collider2D exiting)
     {
-        if (receiver == exiting)
-            receiver = null;
+        if (col1 == exiting)
+        {
+            col1 = col2;
+            col2 = null;
+        }
+        else if (col2 == exiting) col2 = null;
+        Debug.Log("a thing exits" + exiting.ToString());
     }
 
 }
