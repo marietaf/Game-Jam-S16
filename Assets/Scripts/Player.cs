@@ -4,13 +4,13 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
     PlayerMovement movementComponent;
-    PlayerInput inputComponent;
+    InputBaseClass inputComponent;
     PlayerClone cloneComponent;
 
 	// Use this for initialization
 	void Start () {
         movementComponent = GetComponent<PlayerMovement>();
-        inputComponent = GetComponent<PlayerInput>();
+        inputComponent = GetComponent<InputBaseClass>();
         cloneComponent = GetComponent<PlayerClone>();
 	}
 	
