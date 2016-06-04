@@ -98,14 +98,24 @@ public class PlayerMovement : MonoBehaviour {
         velocity = characterController.velocity;
     }
 
-    public void TriggeredMove(float velocityMagnitude, float angle)
+    public void TriggeredMove(float velocityMagnitude, float angleRads)
     {
-        triggeredVelocity.x = velocityMagnitude * Mathf.Cos(angle);
-        triggeredVelocity.y = velocityMagnitude * Mathf.Sin(angle);
+        // Trigger change in velocity using magnitude and angle
+        triggeredVelocity.x = velocityMagnitude * Mathf.Cos(angleRads);
+        triggeredVelocity.y = velocityMagnitude * Mathf.Sin(angleRads);
 
-        //characterController.move(triggeredVelocity * Time.deltaTime);
         velocity += triggeredVelocity;
-        characterController.move(velocity * Time.deltaTime);
+        characterController.move(velocity * Time.deltaTime, gravity < 0);
     }
+
+    public void TriggeredMove(Vector3 inputVelocity)
+    {
+        // Trigger change in velocity using vector
+        triggeredVelocity = inputVelocity;
+        velocity += triggeredVelocity;
+        characterController.move(velocity * Time.deltaTime, gravity < 0);
+    }
+
+    public Vector3 GetVelocity() { return velocity; }
 
 }
