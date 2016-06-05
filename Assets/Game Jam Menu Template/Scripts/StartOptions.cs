@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
@@ -24,7 +24,17 @@ public class StartOptions : MonoBehaviour {
 	private float fastFadeIn = .01f;									//Very short fade time (10 milliseconds) to start playing music immediately without a click/glitch
 	private ShowPanels showPanels;										//Reference to ShowPanels script on UI GameObject, to show and hide panels
 
+    public string levelToLoad = "MultiPlayer";
+    private Dictionary<int, string> levelLookup;
+    public int selectedLevel = 0;
 	
+    void Start()
+    {
+        levelLookup = new Dictionary<int, string>();
+        levelLookup.Add(0, "MP_v1");
+        levelLookup.Add(1, "TestLevel");
+    }
+
 	void Awake()
 	{
 		//Get a reference to ShowPanels attached to UI object
@@ -47,8 +57,8 @@ public class StartOptions : MonoBehaviour {
 		//If changeScenes is true, start fading and change scenes halfway through animation when screen is blocked by FadeImage
 		if (changeScenes) 
 		{
-			//Use invoke to delay calling of LoadDelayed by half the length of fadeColorAnimationClip
-			Invoke ("LoadDelayed", fadeColorAnimationClip.length * .5f);
+            //Use invoke to delay calling of LoadDelayed by half the length of fadeColorAnimationClip
+            Invoke ("LoadDelayed", fadeColorAnimationClip.length * .5f);
 
 			//Set the trigger of Animator animColorFade to start transition to the FadeToOpaque state.
 			animColorFade.SetTrigger ("fade");
@@ -108,8 +118,9 @@ public class StartOptions : MonoBehaviour {
 		//Hide the main menu UI element
 		showPanels.HideMenu ();
         showPanels.pauseMenuDirty = true;
-		//Load the selected scene, by scene index number in build settings
-		SceneManager.LoadScene (sceneToStart);
+        //Load the selected scene, by scene index number in build settings
+
+        SceneManager.LoadScene (levelLookup[selectedLevel]);
 	}
 
 	public void HideDelayed()

@@ -34,6 +34,10 @@ public class ShowPanels : MonoBehaviour {
 	//Call this function to deactivate and hide the Options panel during the main menu
 	public void HideOptionsPanel()
 	{
+        //Debug.Log(GameObject.Find("LevelSelect"));
+        //Debug.Log(GameObject.Find("Dropdown").GetComponent<UnityEngine.UI.Dropdown>());
+        //Debug.Log(GetComponentInChildren<UnityEngine.UI.Dropdown>().value);
+        GetComponentInParent<StartOptions>().selectedLevel = GetComponentInChildren<UnityEngine.UI.Dropdown>().value;
         GameObject.Find("MenuPanel").GetComponent<CanvasGroup>().interactable = true;
         myEventSystem.SetSelectedGameObject(GameObject.Find("Options"));
         optionsPanel.SetActive(false);
