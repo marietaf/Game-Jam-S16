@@ -18,13 +18,13 @@ public class TransferPad: MonoBehaviour {
 
         if(_cols.Count > 0)
         {
-            PlayerMovement enterMovement, exitMovement;
+            MovementBaseClass enterMovement, exitMovement;
             foreach (Collider2D col in _cols)
             {
-                enterMovement = entering.GetComponent<PlayerMovement>();
-                exitMovement = col.GetComponent<PlayerMovement>();
+                enterMovement = (entering.GetComponent<PlayerMovement>() != null) ? entering.GetComponent<PlayerMovement>() : (MovementBaseClass)entering.GetComponent<CloneMovement>();
+                exitMovement = (col.GetComponent<PlayerMovement>() != null) ? col.GetComponent<PlayerMovement>() : (MovementBaseClass)col.GetComponent<CloneMovement>();
 
-                Vector2 transferVelocity = enterMovement.GetVelocity();
+                Vector2 transferVelocity = enterMovement.Velocity;
 
                 exitMovement.TriggeredMove(new Vector2(0, transferVelocity.y * 1.05f));
             }

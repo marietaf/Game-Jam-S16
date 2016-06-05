@@ -25,7 +25,7 @@ public class PlayerClone : MonoBehaviour {
                 {
                     clone = (GameObject)Instantiate(clonePrefab, transform.position + new Vector3(0, -1.02f, 0), transform.rotation);
                     PlayerMovement move = GetComponent<PlayerMovement>();
-                    clone.GetComponent<CloneMovement>().SetCloneValues(GetComponent<Transform>(), -move.gravity, move.runSpeed, move.groundDamping, move.inAirDamping, move.jumpHeight);
+                    clone.GetComponent<CloneMovement>().SetCloneValues(GetComponent<Transform>(), -move.gravity, move.jumpHeight);
                 }
                 clone.SetActive(true);
                 clone.GetComponent<CloneMovement>().OnActive(GetComponent<Transform>());

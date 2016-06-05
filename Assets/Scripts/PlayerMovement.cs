@@ -120,7 +120,7 @@ public class PlayerMovement : MovementBaseClass {
 
     }
 
-    public void TriggeredMove(float velocityMagnitude, float angleRads)
+    public override void TriggeredMove(float velocityMagnitude, float angleRads)
     {
         // Trigger change in velocity using magnitude and angle
         triggeredVelocity.x = velocityMagnitude * Mathf.Cos(angleRads);
@@ -130,14 +130,12 @@ public class PlayerMovement : MovementBaseClass {
         characterController.move(velocity * Time.deltaTime, gravity < 0);
     }
 
-    public void TriggeredMove(Vector3 inputVelocity)
+    public override void TriggeredMove(Vector3 inputVelocity)
     {
         // Trigger change in velocity using vector
         velocity += inputVelocity;
         characterController.move(velocity * Time.deltaTime, gravity < 0);
         //Debug.Log(velocity.ToString());
     }
-
-    public Vector3 GetVelocity() { return velocity; }
 
 }
