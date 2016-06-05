@@ -24,22 +24,23 @@ public class CloneMovement : MovementBaseClass
         _jumpHeight = jumpHeight;
     }
 
-    public void OnActive(Transform owner)
+    public void OnActive(Transform ownerTransform, BoxCollider2D ownerCollider)
     {
         // Reset Gravity
         this.gravity = Math.Abs(this.gravity);
 
         // Find a place to spawn
-        Vector2 newPosition = new Vector2(owner.position.x, owner.position.y - owner.transform.localScale.y);
+        float height = ownerCollider.size.y;
+        Vector2 newPosition = new Vector2(ownerTransform.position.x, ownerTransform.position.y - height);
 
-        Collider2D collision = Physics2D.OverlapCircle(newPosition, 0.25f);
+        Collider2D collision = Physics2D.OverlapCircle(newPosition, height / 2.0f);
         while (collision != null && collision != transform.parent)
         {
-            newPosition += Vector2.down * 0.01f;
-            collision = Physics2D.OverlapCircle(newPosition, 0.25f);
+            newPosition += Vector2.down * 0.001f;
+            collision = Physics2D.OverlapCircle(newPosition, height / 2.0f);
         }
 
-        transform.position = new Vector2(owner.position.x, newPosition.y);
+        transform.position = new Vector2(ownerTransform.position.x, newPosition.y);
     }
 
     public override void Move(float horizontalMovement, bool jump, bool dropDown)
@@ -63,7 +64,7 @@ public class CloneMovement : MovementBaseClass
         Vector3 playerVel = _owner.GetComponent<PlayerMovement>().Velocity;
         float diff = _owner.position.x - transform.position.x;
 
-        if ((diff > 0 && playerVel.x > 0) || diff < 0 && playerVel.x < 0)
+        if (Math.Abs(diff) < 0.5f && ((diff > 0 && playerVel.x > 0) || diff < 0 && playerVel.x < 0))
         {
             velocity.x = playerVel.x;
         }

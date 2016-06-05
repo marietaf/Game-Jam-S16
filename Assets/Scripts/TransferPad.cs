@@ -14,6 +14,17 @@ public class TransferPad: MonoBehaviour {
         _cols = new List<Collider2D>();
     }
 
+    void Update()
+    {
+        foreach (Collider2D col in _cols)
+        {
+            if(col.GetComponent<CloneMovement>() != null && !col.gameObject.activeSelf)
+            {
+                _cols.Remove(col);
+            }
+        }
+    }
+
     void OnTriggerEnter2D (Collider2D entering) {
 
         if(_cols.Count > 0)
