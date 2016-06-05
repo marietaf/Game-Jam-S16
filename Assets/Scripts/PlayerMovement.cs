@@ -110,6 +110,11 @@ public class PlayerMovement : MonoBehaviour {
             GetComponent<SpriteRenderer>().flipX = false;
         }
 
+        if (gravity > 0)
+            GetComponent<SpriteRenderer>().flipY = true;
+        else
+            GetComponent<SpriteRenderer>().flipY = false;
+
         // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;
 
