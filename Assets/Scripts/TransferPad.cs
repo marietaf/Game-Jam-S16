@@ -26,7 +26,7 @@ public class TransferPad: MonoBehaviour {
 
                 Vector2 transferVelocity = enterMovement.GetVelocity();
 
-                exitMovement.TriggeredMove(new Vector2(0, transferVelocity.y));
+                exitMovement.TriggeredMove(new Vector2(0, transferVelocity.y * 1.05f));
             }
         }
 
