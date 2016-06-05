@@ -16,10 +16,12 @@ public class PlayerMovement : MovementBaseClass {
     //private Animator _animator;
     private RaycastHit2D _lastControllerColliderHit;
     //private Vector3 velocity;
+    private Vector3 triggeredVelocity;
+    private Animator animationComponent;
 
     void Awake() 
     {
-        //_animator = GetComponent<Animator>();
+        animationComponent = GetComponent<Animator>();
         characterController = GetComponent<CharacterController2D>();
 
         // listen to some events for illustration purposes
@@ -49,6 +51,7 @@ public class PlayerMovement : MovementBaseClass {
         if (characterController.isGrounded)
         {
             velocity.y = 0;
+            animationComponent.SetBool("Duck", false);
         }
 
         if (transform.localScale.x > 0f)
@@ -57,13 +60,15 @@ public class PlayerMovement : MovementBaseClass {
         }
         if (characterController.isGrounded)
         {
-            //_animator.Play( Animator.StringToHash( "Run" ) );
-        }
-        if (horizontalMovement == 0)
-        {
-            if (characterController.isGrounded)
+            animationComponent.SetBool("Jumping", false);
+            if (horizontalMovement == 0)
             {
-                //_animator.Play( Animator.StringToHash( "Idle" ) );
+                animationComponent.SetBool("Moving", false);
+
+            }
+            else
+            {
+                animationComponent.SetBool("Moving", true);
             }
         }
 
@@ -71,6 +76,8 @@ public class PlayerMovement : MovementBaseClass {
         if (characterController.isGrounded && jump)
         {
             velocity.y = Mathf.Sign(-gravity) * Mathf.Sqrt(2f * jumpHeight * Mathf.Abs(gravity));
+            animationComponent.SetBool("Jumping", true);
+            animationComponent.SetBool("Moving", false);
             //_animator.Play( Animator.StringToHash( "Jump" ) );
         }
 
@@ -86,13 +93,51 @@ public class PlayerMovement : MovementBaseClass {
         // this lets uf jump down through one way platforms
         if (characterController.isGrounded && dropDown)
         {
+            animationComponent.SetBool("Duck", true);
             velocity.y *= 3f;
             characterController.ignoreOneWayPlatformsThisFrame = true;
         }
 
         characterController.move(velocity * Time.deltaTime, gravity < 0);
 
+        if (velocity.x > 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (velocity.x < 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+
+        if (gravity > 0)
+            GetComponent<SpriteRenderer>().flipY = true;
+        else
+            GetComponent<SpriteRenderer>().flipY = false;
+
         // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;
+
+
     }
+
+    public void TriggeredMove(float velocityMagnitude, float angleRads)
+    {
+        // Trigger change in velocity using magnitude and angle
+        triggeredVelocity.x = velocityMagnitude * Mathf.Cos(angleRads);
+        triggeredVelocity.y = velocityMagnitude * Mathf.Sin(angleRads);
+
+        velocity += triggeredVelocity;
+        characterController.move(velocity * Time.deltaTime, gravity < 0);
+    }
+
+    public void TriggeredMove(Vector3 inputVelocity)
+    {
+        // Trigger change in velocity using vector
+        velocity += inputVelocity;
+        characterController.move(velocity * Time.deltaTime, gravity < 0);
+        //Debug.Log(velocity.ToString());
+    }
+
+    public Vector3 GetVelocity() { return velocity; }
+
 }
