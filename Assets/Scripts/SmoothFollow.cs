@@ -14,7 +14,6 @@ public class SmoothFollow : MonoBehaviour
     public float minCameraSize = 5, maxCameraSize = 10;
     public bool useFixedUpdate = false;
 
-    private CharacterController2D _player1Controller, _player2Controller;
     private Camera _camera;
     private float _smoothSizeDampVelocity;
     private Vector3 _smoothDampVelocity;
@@ -23,10 +22,7 @@ public class SmoothFollow : MonoBehaviour
     void Awake()
     {
         transform = gameObject.transform;
-
         _camera = GetComponent<Camera>();
-        _player1Controller = player1.GetComponent<CharacterController2D>();
-        _player2Controller = player2.GetComponent<CharacterController2D>();
     }
 
 

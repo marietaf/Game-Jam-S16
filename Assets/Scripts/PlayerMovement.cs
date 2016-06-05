@@ -127,9 +127,9 @@ public class PlayerMovement : MonoBehaviour {
     public void TriggeredMove(Vector3 inputVelocity)
     {
         // Trigger change in velocity using vector
-        triggeredVelocity = inputVelocity;
-        velocity += triggeredVelocity;
+        velocity += inputVelocity;
         characterController.move(velocity * Time.deltaTime, gravity < 0);
+        //Debug.Log(velocity.ToString());
     }
 
     public Vector3 GetVelocity() { return velocity; }
