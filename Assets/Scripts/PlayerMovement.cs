@@ -52,6 +52,7 @@ public class PlayerMovement : MonoBehaviour {
         if (characterController.isGrounded)
         {
             velocity.y = 0;
+            animationComponent.SetBool("Duck", false);
         }
 
         if (transform.localScale.x > 0f)
@@ -93,6 +94,7 @@ public class PlayerMovement : MonoBehaviour {
         // this lets uf jump down through one way platforms
         if (characterController.isGrounded && dropDown)
         {
+            animationComponent.SetBool("Duck", true);
             velocity.y *= 3f;
             characterController.ignoreOneWayPlatformsThisFrame = true;
         }
@@ -107,6 +109,11 @@ public class PlayerMovement : MonoBehaviour {
         {
             GetComponent<SpriteRenderer>().flipX = false;
         }
+
+        if (gravity > 0)
+            GetComponent<SpriteRenderer>().flipY = true;
+        else
+            GetComponent<SpriteRenderer>().flipY = false;
 
         // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;
