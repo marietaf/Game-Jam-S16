@@ -32,7 +32,7 @@ public class StartOptions : MonoBehaviour {
     {
         levelLookup = new Dictionary<int, string>();
         levelLookup.Add(0, "MP_v1");
-        levelLookup.Add(1, "TestLevel");
+        levelLookup.Add(1, "SP_v2");
     }
 
 	void Awake()
