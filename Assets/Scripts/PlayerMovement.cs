@@ -52,6 +52,7 @@ public class PlayerMovement : MonoBehaviour {
         if (characterController.isGrounded)
         {
             velocity.y = 0;
+            animationComponent.SetBool("Duck", false);
         }
 
         if (transform.localScale.x > 0f)
@@ -93,6 +94,7 @@ public class PlayerMovement : MonoBehaviour {
         // this lets uf jump down through one way platforms
         if (characterController.isGrounded && dropDown)
         {
+            animationComponent.SetBool("Duck", true);
             velocity.y *= 3f;
             characterController.ignoreOneWayPlatformsThisFrame = true;
         }
