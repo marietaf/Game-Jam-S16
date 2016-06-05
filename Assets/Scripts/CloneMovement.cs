@@ -66,7 +66,6 @@ public class CloneMovement : MovementBaseClass
         if ((diff > 0 && playerVel.x > 0) || diff < 0 && playerVel.x < 0)
         {
             velocity.x = playerVel.x;
-            _animationComponent.SetBool("Moving", Math.Abs(velocity.x) > 1.0f ? true : false);
         }
         else
         {
@@ -76,6 +75,8 @@ public class CloneMovement : MovementBaseClass
 
         if(Math.Abs(diff) < 0.5)
         {
+            _animationComponent.SetBool("Moving", Math.Abs(velocity.x) > 1.0f ? true : false);
+
             if (_characterController.isGrounded && jump && (_owner.GetComponent<CharacterController2D>().isGrounded || _owner.GetComponent<CharacterController2D>().collisionState.wasGroundedLastFrame))
             {
                 velocity.y = Mathf.Sign(-gravity) * Mathf.Sqrt(2f * _jumpHeight * Mathf.Abs(gravity));
@@ -89,6 +90,10 @@ public class CloneMovement : MovementBaseClass
                 _characterController.ignoreOneWayPlatformsThisFrame = true;
                 _animationComponent.SetBool("Duck", true);
             }
+        }
+        else
+        {
+            _animationComponent.SetBool("Moving", false);
         }
 
         // apply gravity before moving
