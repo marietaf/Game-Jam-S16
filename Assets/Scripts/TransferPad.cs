@@ -2,7 +2,7 @@
 using System.Collections;
 using Prime31;
 
-public class TransferPadTrigger : MonoBehaviour {
+public class TransferPad: MonoBehaviour {
 
     /// <summary>
     /// Velocity/momentum transfer system requiring 2 players/characters.
@@ -10,7 +10,7 @@ public class TransferPadTrigger : MonoBehaviour {
     private Collider2D col1, col2;
     private PlayerMovement enterMovement, exitMovement;
     private Vector3 transferVelocity;
-    
+
 
     // Initialize the 2 expected colliders interacting with the transfer pad trigger
     void Awake () {
@@ -31,7 +31,7 @@ public class TransferPadTrigger : MonoBehaviour {
             return;
         } else if (col1 != entering) {
             col2 = entering; }
-        Debug.Log("a thing entered");
+        //Debug.Log("a thing entered");
 
         enterMovement = entering.GetComponent<PlayerMovement>();
         
@@ -41,7 +41,7 @@ public class TransferPadTrigger : MonoBehaviour {
 
         exitMovement = col1.GetComponent<PlayerMovement>();
         exitMovement.TriggeredMove(transferVelocity);
-        Debug.Log("a thing happened");
+        //Debug.Log("a thing happened");
     }
 
     
@@ -53,7 +53,7 @@ public class TransferPadTrigger : MonoBehaviour {
             col2 = null;
         }
         else if (col2 == exiting) col2 = null;
-        Debug.Log("a thing exits" + exiting.ToString());
+        //Debug.Log("a thing exits" + exiting.ToString());
     }
 
 }
