@@ -18,10 +18,11 @@ public class PlayerMovement : MonoBehaviour {
     private Vector3 velocity;
     private Vector3 triggeredVelocity;
 
+    private Animator animationComponent;
 
     void Awake()
     {
-        //_animator = GetComponent<Animator>();
+        animationComponent = GetComponent<Animator>();
         characterController = GetComponent<CharacterController2D>();
 
         // listen to some events for illustration purposes
@@ -59,13 +60,15 @@ public class PlayerMovement : MonoBehaviour {
         }
         if (characterController.isGrounded)
         {
-            //_animator.Play( Animator.StringToHash( "Run" ) );
-        }
-        if (horizontalMovement == 0)
-        {
-            if (characterController.isGrounded)
+            animationComponent.SetBool("Jumping", false);
+            if (horizontalMovement == 0)
             {
-                //_animator.Play( Animator.StringToHash( "Idle" ) );
+                animationComponent.SetBool("Moving", false);
+
+            }
+            else
+            {
+                animationComponent.SetBool("Moving", true);
             }
         }
 
@@ -73,6 +76,8 @@ public class PlayerMovement : MonoBehaviour {
         if (characterController.isGrounded && jump)
         {
             velocity.y = Mathf.Sign(-gravity) * Mathf.Sqrt(2f * jumpHeight * Mathf.Abs(gravity));
+            animationComponent.SetBool("Jumping", true);
+            animationComponent.SetBool("Moving", false);
             //_animator.Play( Animator.StringToHash( "Jump" ) );
         }
 
@@ -94,8 +99,19 @@ public class PlayerMovement : MonoBehaviour {
 
         characterController.move(velocity * Time.deltaTime, gravity < 0);
 
+        if (velocity.x > 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (velocity.x < 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+
         // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;
+
+
     }
 
     public void TriggeredMove(float velocityMagnitude, float angleRads)
