@@ -8,6 +8,9 @@ public class ShowPanels : MonoBehaviour {
 	public GameObject menuPanel;							//Store a reference to the Game Object MenuPanel 
 	public GameObject pausePanel;							//Store a reference to the Game Object PausePanel 
 
+    public bool pauseMenuDirty = true;
+    public bool mainMenuDirty = false;
+
     UnityEngine.EventSystems.EventSystem myEventSystem;
 
     void Start()
@@ -40,26 +43,38 @@ public class ShowPanels : MonoBehaviour {
 	//Call this function to activate and display the main menu panel during the main menu
 	public void ShowMenu()
 	{
-        Debug.Log("Show Menu");
         menuPanel.SetActive (true);
+        if (mainMenuDirty)
+        {
+            Debug.Log("Cleaning main menu");
+            mainMenuDirty = false;
+            myEventSystem = GameObject.Find("EventSystem").GetComponent<UnityEngine.EventSystems.EventSystem>();
+        }
         myEventSystem.SetSelectedGameObject(GameObject.Find("Start"));
     }
 
 	//Call this function to deactivate and hide the main menu panel during the main menu
 	public void HideMenu()
 	{
-        Debug.Log("Hide Menu");
         menuPanel.SetActive (false);
 	}
 	
 	//Call this function to activate and display the Pause panel during game play
 	public void ShowPausePanel()
 	{
-		pausePanel.SetActive (true);
+        pausePanel.SetActive (true);
 		optionsTint.SetActive(true);
-        Debug.Log(GameObject.Find("Resume"));
-        myEventSystem.firstSelectedGameObject = GameObject.Find("Resume");
-        myEventSystem.SetSelectedGameObject(GameObject.Find("Resume"));
+
+        if (pauseMenuDirty)
+        {
+            pauseMenuDirty = false;
+            myEventSystem = GameObject.Find("EventSystem").GetComponent<UnityEngine.EventSystems.EventSystem>();
+            myEventSystem.SetSelectedGameObject(GameObject.Find("Resume"));
+        }
+        else if (!myEventSystem.alreadySelecting)
+        {
+            myEventSystem.SetSelectedGameObject(GameObject.Find("Resume"));
+        }
     }
 
 	//Call this function to deactivate and hide the Pause panel during game play
@@ -67,6 +82,5 @@ public class ShowPanels : MonoBehaviour {
 	{
 		pausePanel.SetActive (false);
 		optionsTint.SetActive(false);
-
 	}
 }

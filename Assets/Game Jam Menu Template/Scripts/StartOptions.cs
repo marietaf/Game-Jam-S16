@@ -89,7 +89,7 @@ public class StartOptions : MonoBehaviour {
     public void MenuDelayed()
     {
         inMainMenu = true;
-
+        showPanels.mainMenuDirty = true;
         showPanels.ShowMenu();
         showPanels.HidePausePanel();
 
@@ -102,13 +102,12 @@ public class StartOptions : MonoBehaviour {
 
     public void LoadDelayed()
 	{
-        Debug.Log("Load Delayed");
-		//Pause button now works if escape is pressed since we are no longer in Main menu.
+        //Pause button now works if escape is pressed since we are no longer in Main menu.
 		inMainMenu = false;
 
 		//Hide the main menu UI element
 		showPanels.HideMenu ();
-
+        showPanels.pauseMenuDirty = true;
 		//Load the selected scene, by scene index number in build settings
 		SceneManager.LoadScene (sceneToStart);
 	}
