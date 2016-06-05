@@ -28,6 +28,7 @@ public class PlayerClone : MonoBehaviour {
                     clone.GetComponent<CloneMovement>().SetCloneValues(GetComponent<Transform>(), -move.gravity, move.runSpeed, move.groundDamping, move.inAirDamping, move.jumpHeight);
                 }
                 clone.SetActive(true);
+                clone.GetComponent<CloneMovement>().OnActive(GetComponent<Transform>());
             } else
             {
                 isCloneActive = false;

@@ -40,6 +40,24 @@ public class CloneMovement : MovementBaseClass
         this.jumpHeight = jumpHeight;
     }
 
+    public void OnActive(Transform owner)
+    {
+        // Reset Gravity
+        this.gravity = Math.Abs(this.gravity);
+
+        // Find a place to spawn
+        Vector2 newPosition = new Vector2(owner.position.x, owner.position.y - owner.transform.localScale.y);
+
+        Collider2D collision = Physics2D.OverlapCircle(newPosition, 0.25f);
+        while (collision != null && collision != transform.parent)
+        {
+            newPosition += Vector2.down * 0.01f;
+            collision = Physics2D.OverlapCircle(newPosition, 0.25f);
+        }
+
+        transform.position = new Vector2(owner.position.x, newPosition.y);
+    }
+
     public override void Move(float horizontalMovement, bool jump, bool dropDown)
     {
         if (characterController.isGrounded)
@@ -63,7 +81,37 @@ public class CloneMovement : MovementBaseClass
             }
         }
 
-        if (isSynced)
+        Vector3 playerVel = owner.GetComponent<PlayerMovement>().Velocity;
+        float diff = owner.position.x - transform.position.x;
+
+        if ((diff > 0 && playerVel.x > 0) || diff < 0 && playerVel.x < 0)
+        {
+            velocity.x = playerVel.x;
+        }
+        else
+        {
+            velocity.x = 0;
+        }
+
+
+
+        if(Math.Abs(diff) < 0.5)
+        {
+            if (characterController.isGrounded && jump && (owner.GetComponent<CharacterController2D>().isGrounded || owner.GetComponent<CharacterController2D>().collisionState.wasGroundedLastFrame))
+            {
+                velocity.y = Mathf.Sign(-gravity) * Mathf.Sqrt(2f * jumpHeight * Mathf.Abs(gravity));
+                //_animator.Play( Animator.StringToHash( "Jump" ) );
+            }
+
+            if (characterController.isGrounded && dropDown)
+            {
+                Debug.Log("drop!");
+                velocity.y *= 3f;
+                characterController.ignoreOneWayPlatformsThisFrame = true;
+            }
+        }
+
+        /*if (isSynced)
         {
             if (transform.position.x + syncTolerance < owner.position.x)
             {
@@ -144,7 +192,7 @@ public class CloneMovement : MovementBaseClass
                 velocity.y *= 3f;
                 characterController.ignoreOneWayPlatformsThisFrame = true;
             }
-        }
+        }*/
 
         // apply gravity before moving
         velocity.y += gravity * Time.deltaTime;
