@@ -153,6 +153,11 @@ public class CloneMovement : MovementBaseClass
 
         // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;
+
+        if (gravity > 0)
+            GetComponent<SpriteRenderer>().flipY = true;
+        else
+            GetComponent<SpriteRenderer>().flipY = false;
     }
     
 }
