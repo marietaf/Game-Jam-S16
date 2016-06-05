@@ -6,25 +6,32 @@ public class PlayerClone : MonoBehaviour {
 
     public GameObject clonePrefab;
 
-    private bool isCloneInstantiated;
-    GameObject clone;
+    [HideInInspector]
+    public bool isCloneActive;
+    [HideInInspector]
+    public GameObject clone;
 
     public void Start()
     {
-        isCloneInstantiated = false;
+        isCloneActive = false;
     }
 
 	public void ToggleClone (bool togglePressed) {
         if(togglePressed)
         {
-            if (!isCloneInstantiated) {
-                isCloneInstantiated = true;
-                if(clone == null)
-                    clone = (GameObject)Instantiate(clonePrefab, transform.position + Vector3.down, transform.rotation);
+            if (!isCloneActive) {
+                isCloneActive = true;
+                if (clone == null)
+                {
+                    clone = (GameObject)Instantiate(clonePrefab, transform.position + new Vector3(0, -1.02f, 0), transform.rotation);
+                    PlayerMovement move = GetComponent<PlayerMovement>();
+                    clone.GetComponent<CloneMovement>().SetCloneValues(GetComponent<Transform>(), -move.gravity, move.runSpeed, move.groundDamping, move.inAirDamping, move.jumpHeight);
+                }
                 clone.SetActive(true);
+                clone.GetComponent<CloneMovement>().OnActive(GetComponent<Transform>());
             } else
             {
-                isCloneInstantiated = false;
+                isCloneActive = false;
                 clone.SetActive(false);
             }
         }

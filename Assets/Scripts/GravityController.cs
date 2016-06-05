@@ -27,8 +27,9 @@ public class GravityController : MonoBehaviour {
     {
         if (otherObject.gameObject.layer == 8)//layer 8 is player
         {
-            PlayerMovement movementComponent = otherObject.GetComponent<PlayerMovement>();
+            MovementBaseClass movementComponent = otherObject.GetComponent<MovementBaseClass>();
             movementComponent.gravity *= -1;
+            otherObject.GetComponent<SpriteRenderer>().flipY ^= true;
         }
     }
 }

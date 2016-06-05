@@ -2,11 +2,11 @@
 using System.Collections;
 using Prime31;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MovementBaseClass {
 
     // movement config
     //public bool isGravityDown = true;
-    public float gravity = -25f;
+    //public float gravity = -25f;
     public float runSpeed = 8f;
     public float groundDamping = 20f; // how fast do we change direction? higher means faster
     public float inAirDamping = 5f;
@@ -15,12 +15,11 @@ public class PlayerMovement : MonoBehaviour {
     private CharacterController2D characterController;
     //private Animator _animator;
     private RaycastHit2D _lastControllerColliderHit;
-    private Vector3 velocity;
+    //private Vector3 velocity;
     private Vector3 triggeredVelocity;
-
     private Animator animationComponent;
 
-    void Awake()
+    void Awake() 
     {
         animationComponent = GetComponent<Animator>();
         characterController = GetComponent<CharacterController2D>();
@@ -48,7 +47,7 @@ public class PlayerMovement : MonoBehaviour {
 	
 	}
 	
-	public void Move(float horizontalMovement, bool jump, bool dropDown) {
+	public override void Move(float horizontalMovement, bool jump, bool dropDown) {
         if (characterController.isGrounded)
         {
             velocity.y = 0;
