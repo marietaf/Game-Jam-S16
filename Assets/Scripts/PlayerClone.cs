@@ -27,8 +27,8 @@ public class PlayerClone : MonoBehaviour {
                     PlayerMovement move = GetComponent<PlayerMovement>();
                     clone.GetComponent<CloneMovement>().SetCloneValues(GetComponent<Transform>(), -move.gravity, move.jumpHeight);
                 }
+                clone.GetComponent<CloneMovement>().OnActive(GetComponent<Transform>(), GetComponent<BoxCollider2D>());
                 clone.SetActive(true);
-                clone.GetComponent<CloneMovement>().OnActive(GetComponent<Transform>());
             } else
             {
                 isCloneActive = false;
