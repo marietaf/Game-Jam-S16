@@ -64,7 +64,7 @@ public class CloneMovement : MovementBaseClass
         Vector3 playerVel = _owner.GetComponent<PlayerMovement>().Velocity;
         float diff = _owner.position.x - transform.position.x;
 
-        if ((diff > 0 && playerVel.x > 0) || diff < 0 && playerVel.x < 0)
+        if (Math.Abs(diff) < 0.5f && ((diff > 0 && playerVel.x > 0) || diff < 0 && playerVel.x < 0))
         {
             velocity.x = playerVel.x;
         }
