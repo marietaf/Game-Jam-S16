@@ -5,17 +5,13 @@ using Prime31;
 public class PlayerMovement : MovementBaseClass {
 
     // movement config
-    //public bool isGravityDown = true;
-    //public float gravity = -25f;
     public float runSpeed = 8f;
     public float groundDamping = 20f; // how fast do we change direction? higher means faster
     public float inAirDamping = 5f;
     public float jumpHeight = 3f;
     
     private CharacterController2D characterController;
-    //private Animator _animator;
     private RaycastHit2D _lastControllerColliderHit;
-    //private Vector3 velocity;
     private Vector3 triggeredVelocity;
     private Animator animationComponent;
 
@@ -24,7 +20,7 @@ public class PlayerMovement : MovementBaseClass {
         animationComponent = GetComponent<Animator>();
         characterController = GetComponent<CharacterController2D>();
 
-        // listen to some events for illustration purposes
+        // listen to some events for debug purposes
         characterController.onControllerCollidedEvent += onControllerCollider;
         //characterController.onTriggerEnterEvent += onTriggerEnterEvent;
         //characterController.onTriggerExitEvent += onTriggerExitEvent;
@@ -33,13 +29,12 @@ public class PlayerMovement : MovementBaseClass {
     void onControllerCollider(RaycastHit2D hit)
     {
         // bail out on plain old ground hits cause they arent very interesting
-        if (hit.normal.y == 1f && gravity < 0)
+        if ((hit.normal.y == 1f && gravity < 0) || (hit.normal.y == -1f && gravity > 0))
+        {
             return;
-        if (hit.normal.y == -1f && gravity > 0)
-            return;
+        }
 
-
-        // logs any collider hits if uncommented. it gets noisy so it is commented out for the demo
+        // logs any collider hits if uncommented.
         //Debug.Log( "flags: " + characterController.collisionState + ", hit.normal: " + hit.normal );
     }
 
@@ -78,9 +73,7 @@ public class PlayerMovement : MovementBaseClass {
             velocity.y = Mathf.Sign(-gravity) * Mathf.Sqrt(2f * jumpHeight * Mathf.Abs(gravity));
             animationComponent.SetBool("Jumping", true);
             animationComponent.SetBool("Moving", false);
-            //_animator.Play( Animator.StringToHash( "Jump" ) );
         }
-
 
         // apply horizontal speed smoothing it. dont really do this with Lerp. Use SmoothDamp or something that provides more control
         var smoothedMovementFactor = characterController.isGrounded ? groundDamping : inAirDamping; // how fast do we change direction?
@@ -110,14 +103,15 @@ public class PlayerMovement : MovementBaseClass {
         }
 
         if (gravity > 0)
+        {
             GetComponent<SpriteRenderer>().flipY = true;
+        }
         else
+        {
             GetComponent<SpriteRenderer>().flipY = false;
+        }
 
-        // grab our current _velocity to use as a base for all calculations
         velocity = characterController.velocity;
-
-
     }
 
     public override void TriggeredMove(float velocityMagnitude, float angleRads)
