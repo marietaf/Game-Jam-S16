@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameController : MonoBehaviour {
+public class UIController : MonoBehaviour {
 
     public int points;
     public Text pointsText;
